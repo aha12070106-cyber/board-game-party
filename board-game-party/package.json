@@ -1,0 +1,16 @@
+{
+  "name": "board-game-party",
+  "version": "1.0.0",
+  "description": "각자 폰으로 같은 방에 들어와 20가지 파티 게임을 하는 실시간 서버",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "share": "node share.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "8.18.0"
+  }
+}

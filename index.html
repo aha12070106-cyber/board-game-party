@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d1117">
+<title>보드게임 파티</title>
+<meta name="description" content="월드 트레이드(무역 시뮬레이션)와 보드게임 파티(친구들과 폰으로 하는 파티 게임)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@900&display=swap">
+<style>
+:root{--bg:#0d1117;--panel:#161d27;--line:#2a3544;--ink:#ebe6da;--muted:#8a95a3;--brass:#d9aa5c;--brass2:#f2cd8a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;line-height:1.55;
+  background-image:radial-gradient(1000px 520px at 70% -10%,rgba(217,170,92,.1),transparent 60%);display:flex;align-items:center;justify-content:center;padding:32px 16px}
+main{width:min(880px,100%);display:flex;flex-direction:column;gap:24px}
+header{text-align:center}
+.k{font-size:12px;letter-spacing:.4em;color:var(--brass);font-weight:700}
+h1{font-family:"Noto Serif KR",serif;font-weight:900;font-size:clamp(34px,8vw,52px);margin:6px 0 4px;line-height:1.1}
+header p{color:var(--muted);margin:0}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:680px){.cards{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.card h2{margin:0;font-size:20px;font-family:"Noto Serif KR",serif}
+.card p{margin:0;color:#c7c1b3;font-size:14px}
+.tag{align-self:flex-start;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#1d3a2c;color:#bff0d3}
+.tag.srv{background:#3a2e17;color:var(--brass2)}
+.btn{margin-top:auto;display:inline-flex;justify-content:center;padding:12px 16px;border-radius:9px;font-weight:700;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:#1c2531}
+.btn.primary{background:linear-gradient(180deg,#e3b766,#c7944a);border-color:#e9c27c;color:#1b140a}
+.btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+ul{margin:0;padding-left:18px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <header><div class="k">BOARD GAME PARTY</div><h1>무엇을 플레이할까요?</h1><p>브라우저에서 바로 즐기거나, 서버를 켜고 친구들과 함께 놀아요.</p></header>
+  <div class="cards">
+    <section class="card">
+      <span class="tag">바로 플레이</span>
+      <h2>🌏 월드 트레이드</h2>
+      <p>나라를 골라 자원을 생산하고, AI 국가들과 무역하며 가장 발전한 나라를 만드는 무역 시뮬레이션이에요.</p>
+      <ul><li>혼자서 AI 3~7개국과 대결</li><li>PC·모바일 지원, 자동 저장</li></ul>
+      <a class="btn primary" href="./world-trade/">게임 시작 →</a>
+    </section>
+    <section class="card">
+      <span class="tag srv">서버 필요</span>
+      <h2>🎲 보드게임 파티</h2>
+      <p>각자 폰으로 같은 방에 들어와 20가지 파티 게임을 하는 실시간 게임이에요. 실시간 서버가 있어야 해서 이 페이지(GitHub Pages)에서는 실행되지 않아요.</p>
+      <ul><li>내 컴퓨터: START 파일 더블클릭</li><li>항상 켜 두기: Render 무료 배포</li></ul>
+      <a class="btn" href="https://github.com/aha12070106-cyber/board-game-party#readme">실행 방법 보기</a>
+    </section>
+  </div>
+</main>
+</body>
+</html>

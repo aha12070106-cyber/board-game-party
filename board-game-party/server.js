@@ -148,7 +148,9 @@ const server=http.createServer((req,res)=>{
   let u=decodeURIComponent((req.url||'/').split('?')[0]);
   if(u==='/healthz'){res.writeHead(200);return res.end('ok');}
   if(u==='/logic.js'){res.writeHead(200,{'content-type':TYPES['.js'],'cache-control':'no-cache'});return fs.createReadStream(path.join(__dirname,'logic.js')).pipe(res);}
-  if(u==='/'||!path.extname(u))u='/index.html';
+  if(u==='/world-trade'){res.writeHead(301,{location:'/world-trade/'});return res.end();}
+  if(u.startsWith('/world-trade/')&&(u.endsWith('/')||!path.extname(u)))u='/world-trade/index.html';
+  else if(u==='/'||!path.extname(u))u='/index.html';
   const f=path.join(PUB,path.normalize(u).replace(/^(\.\.[/\\])+/,''));
   if(!f.startsWith(PUB))return res.writeHead(403),res.end();
   fs.readFile(f,(err,buf)=>{if(err){res.writeHead(404);return res.end('not found');}res.writeHead(200,{'content-type':TYPES[path.extname(f)]||'application/octet-stream','cache-control':'no-cache'});res.end(buf);});

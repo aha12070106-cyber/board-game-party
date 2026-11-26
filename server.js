@@ -142,15 +142,18 @@ async function runBots(r){
 setInterval(()=>{const cut=Date.now()-6*3600e3;for(const [k,r] of rooms)if(r.touched<cut&&!r.clients.size)rooms.delete(k);},600e3);
 
 /* ---------- http + websocket ---------- */
-const PUB=path.join(__dirname,'public');
+const PUB=path.join(__dirname,'public'),WT=path.join(__dirname,'world-trade');
 const TYPES={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};
 const server=http.createServer((req,res)=>{
   let u=decodeURIComponent((req.url||'/').split('?')[0]);
   if(u==='/healthz'){res.writeHead(200);return res.end('ok');}
   if(u==='/logic.js'){res.writeHead(200,{'content-type':TYPES['.js'],'cache-control':'no-cache'});return fs.createReadStream(path.join(__dirname,'logic.js')).pipe(res);}
-  if(u==='/'||!path.extname(u))u='/index.html';
-  const f=path.join(PUB,path.normalize(u).replace(/^(\.\.[/\\])+/,''));
-  if(!f.startsWith(PUB))return res.writeHead(403),res.end();
+  if(u==='/world-trade'){res.writeHead(301,{location:'/world-trade/'});return res.end();}
+  let root=PUB;
+  if(u.startsWith('/world-trade/')){root=WT;u=u.slice('/world-trade'.length);if(u.endsWith('/')||!path.extname(u))u='/index.html';}
+  else if(u==='/'||!path.extname(u))u='/index.html';
+  const f=path.join(root,path.normalize(u).replace(/^(\.\.[/\\])+/,''));
+  if(!f.startsWith(root+path.sep))return res.writeHead(403),res.end();
   fs.readFile(f,(err,buf)=>{if(err){res.writeHead(404);return res.end('not found');}res.writeHead(200,{'content-type':TYPES[path.extname(f)]||'application/octet-stream','cache-control':'no-cache'});res.end(buf);});
 });
 const wss=new WebSocketServer({server,maxPayload:16*1024});

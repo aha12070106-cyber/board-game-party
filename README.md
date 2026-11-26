@@ -36,7 +36,7 @@
 인터넷에 서버를 올려 두면 언제든 같은 주소로 접속할 수 있어요. 무료예요.
 
 1. [github.com](https://github.com)에 가입해요. 오른쪽 위 **+ → New repository**를 눌러 저장소를 만들어요. 공개(Public)로 만들어요.
-2. 저장소 화면에서 **uploading an existing file**을 누르고, 압축을 푼 폴더 안의 파일과 `public` 폴더를 끌어다 놓은 뒤 **Commit changes**를 눌러요.
+2. 저장소 화면에서 **uploading an existing file**을 누르고, 압축을 푼 폴더 **안의** 파일과 폴더(`public`, `world-trade` 등)를 끌어다 놓은 뒤 **Commit changes**를 눌러요. 폴더째 올리면 한 단계 더 들어가서 Render와 GitHub Pages가 파일을 못 찾아요.
 3. [render.com](https://render.com)에 GitHub 계정으로 가입해요.
 4. **New + → Blueprint**를 누르고 방금 만든 저장소를 골라요. 설정은 `render.yaml` 파일에 다 들어 있어서 따로 입력할 게 없어요.
 5. **Apply**를 누르고 몇 분 기다리면 `https://board-game-party-….onrender.com` 주소가 생겨요.
@@ -80,4 +80,29 @@ API 키가 없어도 AI 플레이어는 준비된 문장으로 잘 움직여요.
 | `server.js` | 서버 본체 (방, 실시간 동기화, 타이머, AI) |
 | `logic.js` | 20가지 게임 규칙과 AI 두뇌 |
 | `public/` | 폰에서 보이는 화면 |
+| `index.html` | GitHub Pages 첫 화면 (게임 선택) |
 | `render.yaml` | Render 자동 설정 |
+
+---
+
+## 🌏 월드 트레이드 (무역 시뮬레이션)
+
+**바로 플레이:** https://aha12070106-cyber.github.io/board-game-party/world-trade/ (GitHub Pages)
+
+서버를 켠 뒤 주소 뒤에 **`/world-trade/`**를 붙여도 열려요. (예: `http://localhost:3000/world-trade/`)
+`world-trade/index.html`을 브라우저로 바로 열어도 혼자 플레이할 수 있어요.
+
+- 8개 국가 중 하나를 골라 AI 국가(3·5·7개국, 난이도 3단계)와 경쟁해요.
+- 라운드 순서: 자원 확인 → 생산 → 국가 간 무역(제안·역제안·수락/거절) → 세계 시장 → 정산
+- 자원 10종, 상품 13종, 발전 항목 5개(산업·경제·기술·농업·무역 규모), 세계 사건 10종
+- 라운드 제한 시간 설정, 자동 저장 / 이어하기, PC·모바일 화면 지원
+
+| 파일 | 역할 |
+|---|---|
+| `world-trade/data.js` | 자원·상품·국가·발전 비용 데이터 |
+| `world-trade/engine.js` | 게임 규칙, 시장 가격, AI |
+| `world-trade/ui.js`, `style.css` | 화면 |
+
+### GitHub Pages
+저장소 **Settings → Pages**에서 *Deploy from a branch*, `main` / `(root)`로 설정되어 있으면 최상위 `index.html`이 첫 화면이 돼요.
+GitHub Pages는 정적 파일만 올려 주기 때문에 **월드 트레이드는 바로 플레이할 수 있지만, 보드게임 파티는 실시간 서버가 필요해서 Pages에서는 동작하지 않아요.** (내 컴퓨터, Render, Codespaces 방법을 쓰세요)

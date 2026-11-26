@@ -82,6 +82,7 @@ API 키가 없어도 AI 플레이어는 준비된 문장으로 잘 움직여요.
 | `public/` | 폰에서 보이는 화면 |
 | `index.html` | GitHub Pages 첫 화면 (게임 선택) |
 | `render.yaml` | Render 자동 설정 |
+| `market/` | 🛒 TradeHub 포인트 거래소 ([설정 방법](market/README.md)) |
 
 ---
 
@@ -106,3 +107,13 @@ API 키가 없어도 AI 플레이어는 준비된 문장으로 잘 움직여요.
 ### GitHub Pages
 저장소 **Settings → Pages**에서 *Deploy from a branch*, `main` / `(root)`로 설정되어 있으면 최상위 `index.html`이 첫 화면이 돼요.
 GitHub Pages는 정적 파일만 올려 주기 때문에 **월드 트레이드는 바로 플레이할 수 있지만, 보드게임 파티는 실시간 서버가 필요해서 Pages에서는 동작하지 않아요.** (내 컴퓨터, Render, Codespaces 방법을 쓰세요)
+
+---
+
+## 🛒 TradeHub (포인트 거래소)
+
+**바로 열기:** https://aha12070106-cyber.github.io/board-game-party/market/ (GitHub Pages)
+
+회원가입 → 상품 등록 → 포인트로 구매·판매하는 온라인 거래소예요. 관리자 페이지, 거래 알림, 즐겨찾기, 공지사항이 있어요.
+Firebase를 연결하기 전에는 이 브라우저에만 저장되는 **체험 모드**로 열려요.
+실제 서비스로 쓰려면 [market/README.md](market/README.md)의 Firebase 연결 순서를 따라 하세요.

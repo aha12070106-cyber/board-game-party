@@ -1,0 +1,11 @@
+{
+  "name": "tradehub-functions",
+  "private": true,
+  "description": "TradeHub 서버 코드 (구매, 포인트, 관리자 기능)",
+  "main": "index.js",
+  "engines": { "node": "22" },
+  "dependencies": {
+    "firebase-admin": "^14.5.1",
+    "firebase-functions": "^7.4.0"
+  }
+}

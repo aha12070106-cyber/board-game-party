@@ -1,0 +1,118 @@
+rules_version = '2';
+
+// TradeHub Firestore 보안 규칙
+// - 포인트, 거래 기록, 포인트 내역, 알림, 즐겨찾기, 회원 문서는 브라우저에서 쓸 수 없어요.
+//   이것들은 Cloud Functions(서버)만 바꿀 수 있어요.
+// - 관리자는 admins/{uid} 문서가 있는 사람이에요. 이 문서는 아무도 브라우저에서 만들 수 없고,
+//   Firebase 콘솔에서만 만들 수 있어요.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function myProfilePath() { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function activeMember() {
+      return signedIn() && exists(myProfilePath()) && get(myProfilePath()).data.banned != true;
+    }
+
+    function validProduct(d) {
+      return d.title is string && d.title.size() >= 2 && d.title.size() <= 60
+        && d.description is string && d.description.size() <= 2000
+        && d.price is int && d.price >= 1 && d.price <= 10000000
+        && d.stock is int && d.stock >= 0 && d.stock <= 9999
+        && d.category in ['game', 'skin', 'digital', 'goods', 'boardgame', 'electronics', 'etc']
+        && d.status in ['active', 'hidden']
+        && d.imageUrl is string && d.imageUrl.size() <= 1000
+        && (d.imageUrl == '' || d.imageUrl.matches('https?://.*'))
+        && d.imagePath is string && d.imagePath.size() <= 300;
+    }
+
+    match /admins/{uid} {
+      allow read: if isSelf(uid) || isAdmin();
+      allow write: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isAdmin();
+      allow write: if false; // 가입·프로필 수정·포인트 변경은 모두 서버에서
+
+      match /favorites/{productId} {
+        allow read: if isSelf(uid);
+        allow write: if false;
+      }
+
+      match /notifications/{nid} {
+        allow read, delete: if isSelf(uid);
+        // 읽음 표시만 바꿀 수 있어요.
+        allow update: if isSelf(uid)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read'])
+          && request.resource.data.read == true;
+        allow create: if false;
+      }
+    }
+
+    match /products/{productId} {
+      allow read: if resource.data.status == 'active'
+        || (signedIn() && (resource.data.sellerId == request.auth.uid || isAdmin()));
+
+      allow create: if activeMember()
+        && request.resource.data.keys().hasOnly(['title', 'description', 'price', 'stock', 'category', 'status',
+             'imageUrl', 'imagePath', 'sellerId', 'sellerName', 'soldCount', 'favCount', 'isDemo', 'createdAt', 'updatedAt'])
+        && validProduct(request.resource.data)
+        && request.resource.data.sellerId == request.auth.uid
+        && request.resource.data.sellerName == get(myProfilePath()).data.nickname
+        && request.resource.data.soldCount == 0
+        && request.resource.data.favCount == 0
+        && request.resource.data.isDemo == false
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        && (request.resource.data.imagePath == ''
+            || request.resource.data.imagePath.matches('products/' + request.auth.uid + '/[^/]+'));
+
+      // 판매자: 내용·가격·재고·노출만 바꿀 수 있어요. 판매 수량, 판매자, 테스트 여부는 못 바꿔요.
+      // 관리자: 노출 상태만 바꿀 수 있어요(숨김/공개).
+      allow update: if (
+          activeMember()
+          && resource.data.sellerId == request.auth.uid
+          && resource.data.get('hiddenByAdmin', false) != true
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['title', 'description', 'price', 'stock', 'category', 'status', 'imageUrl', 'imagePath', 'updatedAt'])
+          && validProduct(request.resource.data)
+          && request.resource.data.updatedAt == request.time
+          && (request.resource.data.imagePath == ''
+              || request.resource.data.imagePath.matches('products/' + request.auth.uid + '/[^/]+'))
+        ) || (
+          isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])
+          && request.resource.data.status in ['active', 'hidden']
+        );
+
+      allow delete: if signedIn() && (resource.data.sellerId == request.auth.uid || isAdmin());
+    }
+
+    match /trades/{tradeId} {
+      allow read: if signedIn()
+        && (resource.data.buyerId == request.auth.uid || resource.data.sellerId == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    match /pointLogs/{logId} {
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['title', 'body', 'pinned', 'authorName', 'createdAt'])
+        && request.resource.data.title is string && request.resource.data.title.size() >= 2 && request.resource.data.title.size() <= 80
+        && request.resource.data.body is string && request.resource.data.body.size() >= 1 && request.resource.data.body.size() <= 3000
+        && request.resource.data.pinned is bool
+        && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 30;
+      allow delete: if isAdmin();
+    }
+  }
+}

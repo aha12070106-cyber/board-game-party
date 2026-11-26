@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1018">
+<title>TradeHub 포인트 거래소</title>
+<meta name="description" content="회원가입하고 상품을 올려 포인트로 사고파는 온라인 거래소">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4l24 14v28L32 60 8 46V18z' fill='%2341b8ff'/%3E%3Cpath d='M32 18l12 7v14l-12 7-12-7V25z' fill='%230b1018'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Grotesk:wght@600;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#view">본문으로 건너뛰기</a>
+
+<div id="mode-banner" class="mode-banner" hidden>
+  <span id="mode-banner-text">🧪 체험 모드 — 데이터가 이 브라우저에만 저장되고 보안이 없어요. 실제 서비스는 Firebase를 연결하세요.</span>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#/" aria-label="TradeHub 홈">
+      <span class="logo-mark">⬡</span><span class="logo-text">Trade<b>Hub</b></span>
+    </a>
+    <form class="search-form top-search" role="search">
+      <input type="search" placeholder="상품 검색" aria-label="상품 검색" autocomplete="off">
+      <button class="search-btn" type="submit" aria-label="검색">⌕</button>
+    </form>
+    <nav class="main-nav" aria-label="주 메뉴">
+      <a href="#/" data-nav="home">홈</a>
+      <a href="#/browse" data-nav="browse">둘러보기</a>
+      <a href="#/notices" data-nav="notices">공지<span class="notice-dot" hidden></span></a>
+      <a href="#/sell" data-nav="sell" class="sell-link">판매하기</a>
+      <a href="#/admin" data-nav="admin" class="admin-only">관리자</a>
+    </nav>
+    <div class="top-actions">
+      <a id="points-chip" class="points-chip" href="#/me/points" hidden title="보유 포인트"><span class="coin">P</span><span id="points-value"></span></a>
+      <a class="icon-btn bell signed-only" href="#/notifications" aria-label="거래 알림">🔔<span class="notif-badge" hidden></span></a>
+      <div class="user-menu-wrap signed-only">
+        <button id="user-menu-btn" class="user-btn" aria-haspopup="true" aria-label="내 메뉴"><span id="user-avatar" class="avatar sm"></span><span id="user-name" class="user-name"></span></button>
+        <div id="user-menu" class="user-menu" role="menu">
+          <a href="#/me/products" role="menuitem">📦 내 상품</a>
+          <a href="#/me/purchases" role="menuitem">🛍️ 구매 내역</a>
+          <a href="#/me/sales" role="menuitem">💰 판매 내역</a>
+          <a href="#/me/points" role="menuitem">🪙 포인트 내역</a>
+          <a href="#/me/favorites" role="menuitem">♥ 즐겨찾기</a>
+          <a href="#/me/settings" role="menuitem">⚙️ 프로필 설정</a>
+          <a href="#/admin" role="menuitem" class="admin-only">🛡️ 관리자</a>
+          <button id="logout-btn" role="menuitem">↩ 로그아웃</button>
+        </div>
+      </div>
+      <a class="btn ghost sm signed-out-only" href="#/login">로그인</a>
+      <a class="btn primary sm signed-out-only hide-xs" href="#/signup">회원가입</a>
+    </div>
+  </div>
+</header>
+
+<main id="view" class="container" tabindex="-1">
+  <div class="detail-loading">불러오는 중…</div>
+</main>
+
+<footer class="footer container">
+  <div><b>TradeHub</b> · 포인트로 사고파는 거래소</div>
+  <div class="muted small">포인트는 이 사이트 안에서만 쓰는 가상 화폐예요. 현금으로 바꿀 수 없어요.</div>
+</footer>
+
+<nav class="bottom-nav" aria-label="하단 메뉴">
+  <a href="#/" data-nav="home"><span>🏠</span>홈</a>
+  <a href="#/browse" data-nav="browse"><span>🔍</span>둘러보기</a>
+  <a href="#/sell" data-nav="sell" class="bn-sell"><span>＋</span>판매</a>
+  <a href="#/notices" data-nav="notices"><span>📢</span>공지<i class="notice-dot" hidden></i></a>
+  <a href="#/me" data-nav="me"><span>👤</span>내 정보</a>
+</nav>
+
+<div id="modal-root"></div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

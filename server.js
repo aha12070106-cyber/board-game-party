@@ -142,21 +142,30 @@ async function runBots(r){
 setInterval(()=>{const cut=Date.now()-6*3600e3;for(const [k,r] of rooms)if(r.touched<cut&&!r.clients.size)rooms.delete(k);},600e3);
 
 /* ---------- http + websocket ---------- */
-const PUB=path.join(__dirname,'public'),WT=path.join(__dirname,'world-trade');
-const TYPES={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};
+const PUB=path.join(__dirname,'public'),WT=path.join(__dirname,'world-trade'),GWD=path.join(__dirname,'galactic-war');
+const TYPES={'.json':'application/json; charset=utf-8','.webmanifest':'application/manifest+json','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};
 const server=http.createServer((req,res)=>{
   let u=decodeURIComponent((req.url||'/').split('?')[0]);
   if(u==='/healthz'){res.writeHead(200);return res.end('ok');}
   if(u==='/logic.js'){res.writeHead(200,{'content-type':TYPES['.js'],'cache-control':'no-cache'});return fs.createReadStream(path.join(__dirname,'logic.js')).pipe(res);}
   if(u==='/world-trade'){res.writeHead(301,{location:'/world-trade/'});return res.end();}
+  if(u==='/galactic-war'){res.writeHead(301,{location:'/galactic-war/'});return res.end();}
   let root=PUB;
   if(u.startsWith('/world-trade/')){root=WT;u=u.slice('/world-trade'.length);if(u.endsWith('/')||!path.extname(u))u='/index.html';}
+  else if(u.startsWith('/galactic-war/')){root=GWD;u=u.slice('/galactic-war'.length);if(u.endsWith('/')||!path.extname(u))u='/index.html';}
   else if(u==='/'||!path.extname(u))u='/index.html';
   const f=path.join(root,path.normalize(u).replace(/^(\.\.[/\\])+/,''));
   if(!f.startsWith(root+path.sep))return res.writeHead(403),res.end();
   fs.readFile(f,(err,buf)=>{if(err){res.writeHead(404);return res.end('not found');}res.writeHead(200,{'content-type':TYPES[path.extname(f)]||'application/octet-stream','cache-control':'no-cache'});res.end(buf);});
 });
-const wss=new WebSocketServer({server,maxPayload:16*1024});
+const wss=new WebSocketServer({noServer:true,maxPayload:16*1024});
+/* GALACTIC WAR: /gw 경로의 웹소켓은 은하 전쟁 서버로, 나머지는 보드게임 파티로 보내요. */
+const galactic=require('./gw-server.js')({dataDir:process.env.GW_DATA_DIR||path.join(__dirname,'data')});
+server.on('upgrade',(req,socket,head)=>{
+  const u=(req.url||'/').split('?')[0];
+  if(u==='/gw'||u.startsWith('/gw/'))return galactic.handleUpgrade(req,socket,head);
+  wss.handleUpgrade(req,socket,head,ws=>wss.emit('connection',ws,req));
+});
 wss.on('connection',ws=>{
   ws.isAlive=true;ws.on('pong',()=>{ws.isAlive=true;});
   ws.on('message',data=>{

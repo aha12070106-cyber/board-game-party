@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05071a">
+<title>GALACTIC WAR</title>
+<meta name="description" content="GALACTIC WAR — 육각형 은하 지도에서 최대 4개 제국이 행성 점령, 자원 관리, 기술 연구, 함대 전투, 외교로 경쟁하는 온라인 턴제 우주 전략 보드게임">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div id="app">
+  <section id="scr-menu" class="screen"></section>
+  <section id="scr-create" class="screen"></section>
+  <section id="scr-rooms" class="screen"></section>
+  <section id="scr-room" class="screen"></section>
+  <section id="scr-single" class="screen"></section>
+  <section id="scr-codex" class="screen"></section>
+  <section id="scr-records" class="screen"></section>
+  <section id="scr-settings" class="screen"></section>
+  <section id="scr-game" class="screen game">
+    <header class="top" id="top"></header>
+    <div class="phases" id="phases"></div>
+    <aside class="side left" id="left"></aside>
+    <main class="mapwrap" id="mapwrap">
+      <svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="은하 지도"></svg>
+      <div class="mapctl">
+        <button type="button" data-zoom="1" aria-label="확대">＋</button>
+        <button type="button" data-zoom="-1" aria-label="축소">－</button>
+        <button type="button" data-zoom="0" aria-label="내 수도로">◎</button>
+      </div>
+      <div class="movehint" id="movehint" hidden></div>
+      <div class="turnbanner" id="turnbanner" hidden></div>
+    </main>
+    <aside class="side right" id="right"></aside>
+    <footer class="bottom" id="bottom"></footer>
+  </section>
+</div>
+<div id="modal" class="modal" hidden></div>
+<div id="confirm" class="modal confirm" hidden></div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<div id="netbar" class="netbar" hidden></div>
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

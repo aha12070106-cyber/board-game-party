@@ -81,7 +81,30 @@ API 키가 없어도 AI 플레이어는 준비된 문장으로 잘 움직여요.
 | `logic.js` | 20가지 게임 규칙과 AI 두뇌 |
 | `public/` | 폰에서 보이는 화면 |
 | `index.html` | GitHub Pages 첫 화면 (게임 선택) |
+| `gw-server.js`, `galactic-war/` | 🌌 GALACTIC WAR (아래 설명) |
 | `render.yaml` | Render 자동 설정 |
+
+---
+
+# 🌌 GALACTIC WAR (온라인 우주 전략)
+
+육각형 은하 지도에서 2~4개 제국이 **행성 점령 · 자원 관리 · 기술 연구 · 함대 전투 · 외교**로 패권을 다투는 턴제 전략 보드게임이에요.
+
+- **싱글 플레이 (서버 필요 없음):** https://aha12070106-cyber.github.io/board-game-party/galactic-war/ → 싱글 플레이
+- **온라인 멀티플레이:** 이 서버를 켜고(아래 방법 그대로) 주소 뒤에 **`/galactic-war/`**를 붙여요. 예: `http://localhost:3000/galactic-war/`, `https://board-game-party-….onrender.com/galactic-war/`
+  - GitHub Pages 주소로 열었다면 **설정 → 서버 주소**에 서버 주소(예: `board-game-party-….onrender.com`)를 넣으면 온라인 메뉴를 쓸 수 있어요.
+- 로비: 빠른 게임 · 방 만들기(인원, 공개/비공개, 비밀번호, 맵 크기 25/49/81/121칸, 게임 속도, 승리 조건) · 방 참가(목록/코드/초대 링크) · 싱글 플레이 · 제국 도감 · 게임 기록 · 설정 · 게임 규칙
+- **모든 행동은 서버가 검증**해요. 클라이언트는 행동만 요청하고, 자원·행성 소유권·전투 결과는 서버가 계산해요. 플레이어마다 안개가 걸린 정보만 받아요.
+- 게임은 `data/` 폴더에 자동 저장돼서 새로고침하거나 서버가 다시 켜져도 이어서 할 수 있어요. 게임을 떠나면 AI가 대신 운영하고, 다시 들어오면 되찾아요.
+- 구조와 데이터 설계: [`galactic-war/DESIGN.md`](galactic-war/DESIGN.md)
+
+> Render 무료 플랜은 서버가 잠들거나 다시 배포되면 디스크가 초기화돼서 저장된 온라인 게임이 사라질 수 있어요. 오래 이어서 할 게임은 내 컴퓨터 실행을 쓰거나, Render 유료 플랜의 Persistent Disk를 붙이고 `GW_DATA_DIR` 환경 변수를 그 경로로 지정하세요.
+
+| 파일 | 역할 |
+|---|---|
+| `galactic-war/engine.js` | 게임 규칙 엔진 (서버·브라우저 공용): 맵 생성, 행동 검증, 전투, 연구, 외교, 이벤트, 승리, AI |
+| `galactic-war/ui.js`, `style.css`, `index.html` | 화면 |
+| `gw-server.js` | 온라인 권위 서버 (방, 동기화, 턴 타이머, AI 턴, 저장/재접속) |
 
 ---
 

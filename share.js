@@ -63,7 +63,7 @@ function lanAddress(){
   let shown=false;
   const watch=buf=>{const m=String(buf).match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
     if(m&&!shown){shown=true;
-      big(`준비 완료! 이 링크를 친구들에게 보내세요:\n\n  ${m[0]}\n\n- 이 창을 닫으면 게임도 꺼져요. 노는 동안 켜 두세요.\n- 링크는 실행할 때마다 바뀌어요.${lan?`\n- 같은 와이파이라면 http://${lan}:${PORT} 로도 들어올 수 있어요.`:''}`);
+      big(`준비 완료! 이 링크를 친구들에게 보내세요:\n\n  ${m[0]}\n\n🌌 GALACTIC WAR(우주 전략 온라인):\n  ${m[0]}/galactic-war/\n\n- 이 창을 닫으면 게임도 꺼져요. 노는 동안 켜 두세요.\n- 링크는 실행할 때마다 바뀌어요.${lan?`\n- 같은 와이파이라면 http://${lan}:${PORT} 로도 들어올 수 있어요.`:''}`);
       setTimeout(()=>openBrowser(m[0]),1500);}};
   tun.stdout.on('data',watch);tun.stderr.on('data',watch);
   setTimeout(()=>{if(!shown){big(`공개 링크가 늦어지고 있어요. 조금 더 기다리거나,\n같은 와이파이의 폰은 http://${lan||'localhost'}:${PORT} 로 들어오세요.`);openBrowser(`http://localhost:${PORT}`);}},40000);
